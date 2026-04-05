@@ -19,7 +19,7 @@ const options = {
         },
     servers: [
       {
-        url: 'http://finance-dashboard-backend-sqbs.onrender.com'
+        url: 'https://finance-dashboard-backend-sqbs.onrender.com'
       }
     ]
   },
