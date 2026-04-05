@@ -1,9 +1,9 @@
 const app = require('./app');
-const config = require('./config/config');
+// const config = require('./config/config');
 const { sequelize } = require('./models');
 
-const PORT = config.port;
-
+// const PORT = config.port;
+const PORT = process.env.PORT || 3000;
 const startServer = async () => {
   try {
     await sequelize.authenticate();
