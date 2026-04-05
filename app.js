@@ -39,6 +39,9 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK' });
+});
 
 // 🚨 404 Handler
 app.use((req, res) => {
