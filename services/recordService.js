@@ -1,25 +1,60 @@
 const { FinancialRecord } = require('../models');
+const { Op } = require('sequelize');
 
 // CREATE
 const createRecord = async (data) => {
   return await FinancialRecord.create(data);
 };
 
-// GET ALL
-const getAllRecords = async (user) => {
-  return await FinancialRecord.findAll({
-    where: { createdBy: user.id }
+// BULK CREATE
+const bulkCreateRecords = async (records) => {
+  return await FinancialRecord.bulkCreate(records);
+};
+
+// GET ALL WITH FILTERING
+const getAllRecords = async (user, query) => {
+  let where = {
+    createdBy: user.id
+  };
+
+  // 🔍 Filter by type (income / expense)
+  if (query.type) {
+    where.type = query.type;
+  }
+
+  // 🔍 Filter by category
+  if (query.category) {
+    where.category = query.category;
+  }
+
+  // 🔍 Filter by date range
+  if (query.startDate && query.endDate) {
+    where.date = {
+      [Op.between]: [query.startDate, query.endDate]
+    };
+  }
+
+  return await FinancialRecord.findAll({ where });
+};
+
+// GET ONE (secure)
+const getRecordById = async (id, userId) => {
+  return await FinancialRecord.findOne({
+    where: {
+      id,
+      createdBy: userId
+    }
   });
 };
 
-// GET ONE
-const getRecordById = async (id) => {
-  return await FinancialRecord.findByPk(id);
-};
-
-// UPDATE
-const updateRecord = async (id, data) => {
-  const record = await FinancialRecord.findByPk(id);
+// UPDATE (secure)
+const updateRecord = async (id, data, userId) => {
+  const record = await FinancialRecord.findOne({
+    where: {
+      id,
+      createdBy: userId
+    }
+  });
 
   if (!record) return null;
 
@@ -27,9 +62,14 @@ const updateRecord = async (id, data) => {
   return record;
 };
 
-// DELETE
-const deleteRecord = async (id) => {
-  const record = await FinancialRecord.findByPk(id);
+// DELETE (secure)
+const deleteRecord = async (id, userId) => {
+  const record = await FinancialRecord.findOne({
+    where: {
+      id,
+      createdBy: userId
+    }
+  });
 
   if (!record) return null;
 
@@ -39,6 +79,7 @@ const deleteRecord = async (id) => {
 
 module.exports = {
   createRecord,
+  bulkCreateRecords,
   getAllRecords,
   getRecordById,
   updateRecord,
