@@ -77,31 +77,25 @@ router.post(
  *   get:
  *     summary: Get all financial records with filtering
  *     tags: [Records]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: type
  *         schema:
  *           type: string
- *           example: income
- *         description: Filter by type (income/expense)
  *       - in: query
  *         name: category
  *         schema:
  *           type: string
- *           example: food
- *         description: Filter by category
  *       - in: query
  *         name: startDate
  *         schema:
  *           type: string
- *           example: 2026-04-01
- *         description: Start date for filtering
  *       - in: query
  *         name: endDate
  *         schema:
  *           type: string
- *           example: 2026-04-30
- *         description: End date for filtering
  *     responses:
  *       200:
  *         description: List of filtered records

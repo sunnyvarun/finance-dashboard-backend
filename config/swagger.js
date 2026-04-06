@@ -17,6 +17,11 @@ const options = {
             }
           }
         },
+        security: [
+          {
+            bearerAuth: []
+          }
+        ],
     servers: [
       {
         url: 'https://finance-dashboard-backend-sqbs.onrender.com'
